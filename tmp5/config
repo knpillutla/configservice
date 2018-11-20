@@ -1,9 +1,0 @@
-[core]
-	symlinks = false
-	repositoryformatversion = 0
-	filemode = false
-	bare = true
-	logallrefupdates = false
-[remote "origin"]
-	url = https://github.com/knpillutla/appconfig
-	fetch = +refs/heads/*:refs/heads/*

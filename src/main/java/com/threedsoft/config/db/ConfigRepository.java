@@ -52,7 +52,7 @@ public class ConfigRepository {
 		if (updatedRecords > 0) {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
-					+ "left outer join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wblc.id=?";
+					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wblc.id=?";
 			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
 					busLocnConfigId);
 			return resultList;
@@ -62,12 +62,12 @@ public class ConfigRepository {
 
 	public List<ConfigDTO> insertConfigValue(Long configId, String value, String busName, Integer locnNbr,
 			String comments) throws Exception {
-		String insertSql = "INSERT INTO SomeTable(WMS_CONFIG_ID, BUS_NAME, LOCN_NBR, VALUE, COMMENTS) VALUES(?,?,?,?,?)";
+		String insertSql = "INSERT INTO WMS_BUS_LOCN_CONFIG(WMS_CONFIG_ID, BUS_NAME, LOCN_NBR, VALUE, COMMENTS) VALUES(?,?,?,?,?)";
 		int updatedRecords = jdbcTemplate.update(insertSql, configId, busName, locnNbr, value, comments);
 		if (updatedRecords > 0) {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
-					+ "left outer join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wc.id=? and wblc.bus_name=? and wblc.locn_nbr=?";
+					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wc.id=? and wblc.bus_name=? and wblc.locn_nbr=?";
 			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
 					configId, busName, locnNbr);
 			return resultList;

@@ -15,6 +15,20 @@ CREATE TABLE WMS_CONFIG
      UPDATED_BY character varying(25),
      VERSION INTEGER 
 );
+CREATE TABLE WMS_BUS_CONFIG 
+( 
+     ID serial primary key,
+     WMS_CONFIG_ID integer,
+     BUS_NAME    character varying(25),
+     VALUE       character varying(25),
+     COMMENTS       character varying(200),
+ 	 HOST_NAME  character varying(50),
+     CREATED_DTTM  timestamp not null default NOW(),
+     UPDATED_DTTM  timestamp not null default NOW(),
+     CREATED_BY character varying(25),
+     UPDATED_BY character varying(25),
+     VERSION INTEGER 
+);
 CREATE TABLE WMS_BUS_LOCN_CONFIG 
 ( 
      ID serial primary key,

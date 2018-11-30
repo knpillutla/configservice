@@ -24,7 +24,7 @@ import com.threedsoft.util.dto.ErrorResourceDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/configs/v1")
+@RequestMapping("/api/v1/configs")
 @RefreshScope
 @Slf4j
 public class ConfigRestEndPoint {
@@ -48,7 +48,7 @@ public class ConfigRestEndPoint {
 		return ResponseEntity.ok(healthMsg);
 	}
 
-	@GetMapping("/{busName}/config")
+	@GetMapping("/{busName}")
 	public ResponseEntity getConfigForBusName(@PathVariable("busName") String busName) throws IOException {
 		try {
 			return ResponseEntity.ok(configService.getAllConfig(busName,-1));
@@ -59,7 +59,7 @@ public class ConfigRestEndPoint {
 		}
 	}
 
-	@GetMapping("/{busName}/{locnNbr}/config")
+	@GetMapping("/{busName}/{locnNbr}")
 	public ResponseEntity getConfigForBusNameAndLocnNbr(@PathVariable("busName") String busName,
 			@PathVariable("locnNbr") Integer locnNbr) throws IOException {
 		try {
@@ -73,7 +73,28 @@ public class ConfigRestEndPoint {
 		}
 	}
 
-	@PostMapping("/{busName}/{locnNbr}/config")
+	@PostMapping("/{busName}")
+	public ResponseEntity overrideConfigForBusName(@PathVariable("busName") String busName,
+			@RequestBody List<ConfigDTO> configResourceChangeList) throws IOException {
+		long startTime = System.currentTimeMillis();
+		log.info("Received config override request for busName: " + busName
+				+ ": at :" + LocalDateTime.now() );
+		ResponseEntity resEntity = null;
+		try {
+			resEntity = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+					.body(configService.overrideConfig(busName, -1, configResourceChangeList));
+		} catch (Exception ex) {
+			log.error("overrideConfigForBusName Error:", ex);
+			resEntity = ResponseEntity.badRequest().body(new ErrorResourceDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"Error occured while overriding properties:" + ex.getMessage(), configResourceChangeList));
+		}
+		long endTime = System.currentTimeMillis();
+		log.info("Completed config override request for busName: " + busName 
+				+ ": at :" + LocalDateTime.now() + " : total time:" + (endTime - startTime) / 1000.00 + " secs");
+		return resEntity;
+	}
+
+	@PostMapping("/{busName}/{locnNbr}")
 	public ResponseEntity overrideConfigForBusNameAndLocnNbr(@PathVariable("busName") String busName,
 			@PathVariable("locnNbr") Integer locnNbr, @RequestBody List<ConfigDTO> configResourceChangeList) throws IOException {
 		long startTime = System.currentTimeMillis();

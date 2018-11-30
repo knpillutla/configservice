@@ -72,11 +72,24 @@ public class ConfigServiceImpl implements EnvironmentRepository, Ordered {
 					&& configResource.getBusLocnOverrideVal() != null
 					&& !configResource.getBusLocnOverrideVal().trim().equalsIgnoreCase("NOT-SET")) {
 				// insert
-				returnList.addAll(repository.insertConfigValue(configResource.getId(), configResource.getBusLocnOverrideVal(), busName,
-						locnNbr, configResource.getComments()));
+				if(locnNbr<=0) {
+					returnList.addAll(repository.insertBusConfigValue(configResource.getId(), configResource.getBusOverrideVal(), busName,
+							configResource.getComments()));
+					
+				}else {
+					returnList.addAll(repository.insertBusLocnConfigValue(configResource.getId(), configResource.getBusLocnOverrideVal(), busName,
+							locnNbr, configResource.getComments()));
+				}
 			} else {
-				returnList.addAll(repository.updateConfigValue(configResource.getWblcId(), configResource.getBusLocnOverrideVal(),
+				if(locnNbr<=0) {
+					returnList.addAll(repository.updateBusConfigValue(configResource.getWbcId(), configResource.getBusOverrideVal(),
+							configResource.getComments()));
+				}
+				else
+				{
+					returnList.addAll(repository.updateBusLocnConfigValue(configResource.getWblcId(), configResource.getBusLocnOverrideVal(),
 						configResource.getComments()));
+				}
 			}
 		}
 		return returnList;

@@ -28,16 +28,17 @@ public class ConfigRepository {
 
 	public List<ConfigDTO> getAllConfig(String busName, Integer locnNbr) {
 		// get key, def value, bus override if exists, bus locn override if exists. This will help display in the ui
-		String selectSql = "select wc.id, (case when wbc is null then -1 else wbc.id end) as wbcId, (case when wblc is null then -1 else wblc.id end) as wblcId, "
+		String selectSql = "select wc.id, (case when wbc is null then -1 else wbc.id end) as wbcId, "
+				+ "(case when wblc is null then -1 else wblc.id end) as wblcId, "
 				+ "wc.application,wc.profile,wc.module,wc.key,  "
-				+ "wc.value as defaultValue, "
+				+ "wc.value as value, "
 				+ "(case when wbc is null then 'NOT-SET' else wbc.value end) as busOverrideVal,"
 				+ "(case when wblc is null then 'NOT-SET' else wblc.value end) as busLocnOverrideVal, "
 				+ "wblc.created_by as userId, wblc.comments "
 				+ "from wms_config wc "
-				+ "left outer join wms_bus_config wbc on wbc.wms_config_id=wc.id and wbc.bus_name=:busName "
+				+ "left outer join wms_bus_config wbc on wbc.wms_config_id=wc.id and wbc.bus_name=? "
 				+ "left outer join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wblc.bus_name=? and wblc.locn_nbr=?";
-		List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class), busName,
+		List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class), busName, busName,
 				locnNbr);
 		return resultList;
 	}

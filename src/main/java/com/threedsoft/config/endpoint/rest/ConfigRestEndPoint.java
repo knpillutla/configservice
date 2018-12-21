@@ -29,11 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConfigRestEndPoint {
 
-	@Value("${wms.service.health.msg: config Service - Config Server is not working..please check}")
-	private String healthMsg;
+	private String healthMsg="service is healthy";
 
-	@Value("${wms.service.ready.msg: config service not yet ready -  - Config Server is not working..please check}")
-	private String readyMsg;
+	private String readyMsg="service is ready";
 
 	@Autowired
 	private ConfigServiceImpl configService;

@@ -71,8 +71,7 @@ public class ConfigRepository {
 			String selectSql = "select wc.id, wbc.id as wbcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wbc.value as busOverrideVal, wbc.created_by as userId, wbc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_config wbc on wbc.wms_config_id=wc.id and wbc.id=?";
-			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					busConfigId).get(0);
+			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.queryForObject(selectSql, new Object[] { busConfigId }, new BeanPropertyRowMapper(ConfigDTO.class));
 			return responseDTO;
 		}
 		throw new Exception("No record updated for busConfigId:" + busConfigId + ",value:" + value);
@@ -85,8 +84,7 @@ public class ConfigRepository {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wblc.id=?";
-			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					busLocnConfigId).get(0);
+			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.queryForObject(selectSql, new Object[] { busLocnConfigId }, new BeanPropertyRowMapper(ConfigDTO.class));
 			return responseDTO;
 		}
 		throw new Exception("No record updated for busLocnConfigId:" + busLocnConfigId + ",value:" + value);
@@ -99,8 +97,7 @@ public class ConfigRepository {
 			String selectSql = "select wc.id, wbc.id as wbcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wbc.value as busOverrideVal, wbc.created_by as userId, wbc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_config wbc on wbc.wms_config_id=wc.id and wc.id=? and wbc.bus_name=?";
-			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					configId, busName).get(0);
+			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.queryForObject(selectSql, new Object[] { configId, busName }, new BeanPropertyRowMapper(ConfigDTO.class));
 			return configDTO;
 		}
 		throw new Exception(
@@ -115,8 +112,7 @@ public class ConfigRepository {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wc.id=? and wblc.bus_name=? and wblc.locn_nbr=?";
-			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					configId, busName, locnNbr).get(0);
+			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.queryForObject(selectSql, new Object[] { configId, busName, locnNbr }, new BeanPropertyRowMapper(ConfigDTO.class));
 			return configDTO;
 		}
 		throw new Exception(

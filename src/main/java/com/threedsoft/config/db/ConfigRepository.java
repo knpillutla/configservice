@@ -64,50 +64,50 @@ public class ConfigRepository {
 		return resultList;
 	}*/
 
-	public List<ConfigDTO> updateBusConfigValue(Long busConfigId, String value, String comments) throws Exception {
+	public ConfigDTO updateBusConfigValue(Long busConfigId, String value, String comments) throws Exception {
 		String updateSql = "update wms_bus_locn_config set value=?, comments=? where id=?";
 		int updatedRecords = jdbcTemplate.update(updateSql, value, comments, busConfigId);
 		if (updatedRecords > 0) {
 			String selectSql = "select wc.id, wbc.id as wbcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wbc.value as busOverrideVal, wbc.created_by as userId, wbc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_config wbc on wbc.wms_config_id=wc.id and wbc.id=?";
-			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					busConfigId);
-			return resultList;
+			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
+					busConfigId).get(0);
+			return responseDTO;
 		}
 		throw new Exception("No record updated for busConfigId:" + busConfigId + ",value:" + value);
 	}
 
-	public List<ConfigDTO> updateBusLocnConfigValue(Long busLocnConfigId, String value, String comments) throws Exception {
+	public ConfigDTO updateBusLocnConfigValue(Long busLocnConfigId, String value, String comments) throws Exception {
 		String updateSql = "update wms_bus_locn_config set value=?, comments=? where id=?";
 		int updatedRecords = jdbcTemplate.update(updateSql, value, comments, busLocnConfigId);
 		if (updatedRecords > 0) {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wblc.id=?";
-			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					busLocnConfigId);
-			return resultList;
+			ConfigDTO responseDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
+					busLocnConfigId).get(0);
+			return responseDTO;
 		}
 		throw new Exception("No record updated for busLocnConfigId:" + busLocnConfigId + ",value:" + value);
 	}
 	
-	public List<ConfigDTO> insertBusConfigValue(Long configId, String value, String busName,	String comments) throws Exception {
+	public ConfigDTO insertBusConfigValue(Long configId, String value, String busName,	String comments) throws Exception {
 		String insertSql = "INSERT INTO WMS_BUS_CONFIG(WMS_CONFIG_ID, BUS_NAME, LOCN_NBR, VALUE, COMMENTS) VALUES(?,?,?,?,?)";
 		int updatedRecords = jdbcTemplate.update(insertSql, configId, busName, value, comments);
 		if (updatedRecords > 0) {
 			String selectSql = "select wc.id, wbc.id as wbcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wbc.value as busOverrideVal, wbc.created_by as userId, wbc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_config wbc on wbc.wms_config_id=wc.id and wc.id=? and wbc.bus_name=?";
-			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					configId, busName);
-			return resultList;
+			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
+					configId, busName).get(0);
+			return configDTO;
 		}
 		throw new Exception(
 				"No record inserted for configId:" + configId + ",busName:" + busName );
 	}
 
-	public List<ConfigDTO> insertBusLocnConfigValue(Long configId, String value, String busName, Integer locnNbr,
+	public ConfigDTO insertBusLocnConfigValue(Long configId, String value, String busName, Integer locnNbr,
 			String comments) throws Exception {
 		String insertSql = "INSERT INTO WMS_BUS_LOCN_CONFIG(WMS_CONFIG_ID, BUS_NAME, LOCN_NBR, VALUE, COMMENTS) VALUES(?,?,?,?,?)";
 		int updatedRecords = jdbcTemplate.update(insertSql, configId, busName, locnNbr, value, comments);
@@ -115,9 +115,9 @@ public class ConfigRepository {
 			String selectSql = "select wc.id, wblc.id as wblcId, wc.application,wc.profile,wc.module,wc.key,  wc.value, wblc.value as busLocnOverrideVal, wblc.created_by as userId, wblc.comments "
 					+ "from wms_config wc "
 					+ "inner join wms_bus_locn_config wblc on wblc.wms_config_id=wc.id and wc.id=? and wblc.bus_name=? and wblc.locn_nbr=?";
-			List<ConfigDTO> resultList = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
-					configId, busName, locnNbr);
-			return resultList;
+			ConfigDTO configDTO = (ConfigDTO) jdbcTemplate.query(selectSql, new BeanPropertyRowMapper(ConfigDTO.class),
+					configId, busName, locnNbr).get(0);
+			return configDTO;
 		}
 		throw new Exception(
 				"No record inserted for configId:" + configId + ",busName:" + busName + ",locnNbr:" + locnNbr);

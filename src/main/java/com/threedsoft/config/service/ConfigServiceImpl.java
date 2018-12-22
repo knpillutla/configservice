@@ -64,34 +64,32 @@ public class ConfigServiceImpl implements EnvironmentRepository, Ordered {
 	}
 
 	@Transactional
-	public List<ConfigDTO> overrideConfig(String busName, Integer locnNbr,
-			List<ConfigDTO> configResourceChangeList) throws Exception{
-		List<ConfigDTO> returnList = new ArrayList();
-		for (ConfigDTO configResource : configResourceChangeList) {
-			if ((configResource.getWblcId() == null || configResource.getWblcId() <= 0)
-					&& configResource.getBusLocnOverrideVal() != null
-					&& !configResource.getBusLocnOverrideVal().trim().equalsIgnoreCase("NOT-SET")) {
-				// insert
-				if(locnNbr<=0) {
-					returnList.addAll(repository.insertBusConfigValue(configResource.getId(), configResource.getBusOverrideVal(), busName,
-							configResource.getComments()));
-					
-				}else {
-					returnList.addAll(repository.insertBusLocnConfigValue(configResource.getId(), configResource.getBusLocnOverrideVal(), busName,
-							locnNbr, configResource.getComments()));
-				}
-			} else {
-				if(locnNbr<=0) {
-					returnList.addAll(repository.updateBusConfigValue(configResource.getWbcId(), configResource.getBusOverrideVal(),
-							configResource.getComments()));
-				}
-				else
-				{
-					returnList.addAll(repository.updateBusLocnConfigValue(configResource.getWblcId(), configResource.getBusLocnOverrideVal(),
-						configResource.getComments()));
-				}
-			}
+	public ConfigDTO overrideConfigForBusName(String busName, ConfigDTO configResource) throws Exception {
+		ConfigDTO responseConfig = null;
+		if (configResource.getWbcId() == null) {
+			// insert
+			responseConfig = repository.insertBusConfigValue(configResource.getId(), configResource.getBusOverrideVal(),
+					busName, configResource.getComments());
+
+		} else {
+			responseConfig = repository.updateBusLocnConfigValue(configResource.getWbcId(),
+					configResource.getBusOverrideVal(), configResource.getComments());
 		}
-		return returnList;
+		return responseConfig;
+	}
+
+	@Transactional
+	public ConfigDTO overrideConfigForBusNameAndLocnNbr(String busName, Integer locnNbr, ConfigDTO configResource)
+			throws Exception {
+		ConfigDTO responseConfig = null;
+		if (configResource.getWblcId() == null) {
+			// insert
+			responseConfig = repository.insertBusLocnConfigValue(configResource.getId(),
+					configResource.getBusLocnOverrideVal(), busName, locnNbr, configResource.getComments());
+		} else {
+			responseConfig = repository.updateBusLocnConfigValue(configResource.getWblcId(),
+					configResource.getBusLocnOverrideVal(), configResource.getComments());
+		}
+		return responseConfig;
 	}
 }

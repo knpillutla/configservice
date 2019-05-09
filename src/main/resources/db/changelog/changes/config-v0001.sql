@@ -53,6 +53,8 @@ INSERT INTO WMS_CONFIG (id,key, value, application, profile, module, description
 VALUES (3,'warehouse','N','appplication','dev','fulfillment','Warehouse (Inventory/Pick/Pack/Print)');
 INSERT INTO WMS_CONFIG (id,key, value, application, profile, module, description)
 VALUES (4,'waveless','Y','appplication','dev','fulfillment','Waveless (Order Streaming, Process Orders as they drop), needs inventory management module');
+INSERT INTO WMS_CONFIG (id,key, value, application, profile, module, description)
+VALUES (5,'auto.manual.fulfillment','N','appplication','dev','global','Enable Manual fulfillment');
 
 
 
